@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Stock Analysis Result</h1>
+    <h2>Stock Information</h2>
+    <ul>
+        <li><strong>Symbol:</strong> {{ stock_data.symbol }}</li>
+        <li><strong>Name:</strong> {{ stock_data.long_name }}</li>
+        <li><strong>Sector:</strong> {{ stock_data.sector }}</li>
+        <li><strong>Industry:</strong> {{ stock_data.industry }}</li>
+        <li><strong>Market Cap:</strong> {{ stock_data.market_cap }}</li>
+        <li><strong>P/E Ratio:</strong> {{ stock_data.pe_ratio }}</li>
+        <li><strong>Dividend Yield:</strong> {{ stock_data.dividend_yield }}</li>
+    </ul>
+
+    <h2>Recommendation</h2>
+    <p>{{ rating }}</p>
+
+    <h2>Investor Sentiment</h2>
+    <p>{{ sentiment }}</p>
+
+    <h2>Competing Companies</h2>
+    <ul>
+        {% for competitor in competitors %}
+        <li>
+            <strong>{{ competitor.long_name }}</strong> ({{ competitor.symbol }})<br>
+            Sector: {{ competitor.sector }}<br>
+            Industry: {{ competitor.industry }}<br>
+            Market Cap: {{ competitor.market_cap }}<br>
+            P/E Ratio: {{ competitor.pe_ratio }}<br>
+            Dividend Yield: {{ competitor.dividend_yield }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="/">Analyze Another Stock</a>
+</body>
+</html>

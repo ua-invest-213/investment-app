@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Analysis Result</title>
+</head>
+<body>
+  <h1>Stock Analysis Result</h1>
+  <h2>Stock Information</h2>
+  <ul>
+    <li><strong>Symbol:</strong> <%= stockData.symbol %></li>
+    <li><strong>Name:</strong> <%= stockData.long_name %></li>
+    <li><strong>Sector:</strong> <%= stockData.sector %></li>
+    <li><strong>Industry:</strong> <%= stockData.industry %></li>
+    <li><strong>Market Cap:</strong> <%= stockData.market_cap %></li>
+    <li><strong>P/E Ratio:</strong> <%= stockData.pe_ratio %></li>
+    <li><strong>Dividend Yield:</strong> <%= stockData.dividend_yield %></li>
+  </ul>
+
+  <h2>Recommendation</h2>
+  <p><%= rating %></p>
+
+  <a href="/">Analyze Another Stock</a>
+</body>
+</html>
