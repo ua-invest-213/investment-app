@@ -1,0 +1,52 @@
+{
+  "AAPL": {
+    "price": 218.27,
+    "percentChange": 1.9476879962634357,
+    "lastUpdated": "2025-03-23T22:38:55.777Z"
+  },
+  "MSFT": {
+    "price": 391.26,
+    "percentChange": 1.1425912521972952,
+    "lastUpdated": "2025-03-23T22:38:55.925Z"
+  },
+  "GOOGL": {
+    "price": 163.99,
+    "percentChange": 0.7309582309582295,
+    "lastUpdated": "2025-03-23T22:38:56.095Z"
+  },
+  "AMZN": {
+    "price": 196.21,
+    "percentChange": 0.6463195691202972,
+    "lastUpdated": "2025-03-23T22:38:56.598Z"
+  },
+  "META": {
+    "price": 596.25,
+    "percentChange": 1.7491467576791808,
+    "lastUpdated": "2025-03-23T22:38:56.758Z"
+  },
+  "NVDA": {
+    "price": 117.7,
+    "percentChange": -0.7002446637981931,
+    "lastUpdated": "2025-03-23T22:38:56.912Z"
+  },
+  "TSLA": {
+    "price": 248.71,
+    "percentChange": 5.269618217218326,
+    "lastUpdated": "2025-03-23T22:38:57.079Z"
+  },
+  "JPM": {
+    "price": 241.63,
+    "percentChange": 1.096188443998161,
+    "lastUpdated": "2025-03-23T22:38:57.270Z"
+  },
+  "V": {
+    "price": 335.66,
+    "percentChange": -1.1310751104565464,
+    "lastUpdated": "2025-03-23T22:38:57.421Z"
+  },
+  "WMT": {
+    "price": 85.98,
+    "percentChange": 0.1981121081459057,
+    "lastUpdated": "2025-03-23T22:38:57.578Z"
+  }
+}

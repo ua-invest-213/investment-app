@@ -1,1 +1,214 @@
-Hello world!
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Information</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Stock Ticker -->
+    <div class="ticker-wrapper">
+        <div class="ticker">
+            <div class="ticker-content">
+                <div class="ticker-item" data-symbol="AAPL">
+                    <span class="ticker-symbol">AAPL</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="MSFT">
+                    <span class="ticker-symbol">MSFT</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="GOOGL">
+                    <span class="ticker-symbol">GOOGL</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="AMZN">
+                    <span class="ticker-symbol">AMZN</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="META">
+                    <span class="ticker-symbol">META</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="NVDA">
+                    <span class="ticker-symbol">NVDA</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="TSLA">
+                    <span class="ticker-symbol">TSLA</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="JPM">
+                    <span class="ticker-symbol">JPM</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="V">
+                    <span class="ticker-symbol">V</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="WMT">
+                    <span class="ticker-symbol">WMT</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <!-- Duplicate items for seamless loop -->
+                <div class="ticker-item" data-symbol="AAPL">
+                    <span class="ticker-symbol">AAPL</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="MSFT">
+                    <span class="ticker-symbol">MSFT</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="GOOGL">
+                    <span class="ticker-symbol">GOOGL</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="AMZN">
+                    <span class="ticker-symbol">AMZN</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="META">
+                    <span class="ticker-symbol">META</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="NVDA">
+                    <span class="ticker-symbol">NVDA</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="TSLA">
+                    <span class="ticker-symbol">TSLA</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="JPM">
+                    <span class="ticker-symbol">JPM</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="V">
+                    <span class="ticker-symbol">V</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+                <div class="ticker-item" data-symbol="WMT">
+                    <span class="ticker-symbol">WMT</span>
+                    <span class="ticker-price">$0.00</span>
+                    <span class="ticker-change">0.00%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid main-content">
+        <div class="row top-section">
+            <!-- Left Column - Company Search -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Company Search</h5>
+                        <div class="search-container">
+                            <input type="text" id="tickerInput" class="form-control" placeholder="Enter ticker symbol (e.g., AAPL)">
+                            <button onclick="search()" class="btn btn-primary">Search</button>
+                        </div>
+                        <div id="error" class="error" style="display: none;"></div>
+                        <div id="profileData" class="data-section">
+                            <div class="placeholder-content">
+                                <p>Company profile will appear here...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Column - AI Summary -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Market Data</h5>
+                        <div id="newsData" class="data-section">
+                            <div class="placeholder-content">
+                                <p>Market sentiment analysis will appear here...</p>
+                            </div>
+                        </div>
+                        <div class="prompt-toggle-container">
+                            <button id="showPromptBtn">Show Prompt</button>
+                            <div id="promptContainer" style="display: none;">
+                                <pre class="prompt-text" id="promptText"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column - Peer Stocks -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Peer Companies</h5>
+                        <div class="placeholder-content">
+                            <p>Peer company stock information will appear here...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="row bottom-section">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Investment Risk Analysis</h5>
+                        <div class="risk-thermometer">
+                            <div class="thermometer-container">
+                                <div class="thermometer">
+                                    <div class="thermometer-bulb">
+                                        <div class="logo-container">
+                                            <img id="companyLogo" src="" alt="Company Logo" class="company-logo">
+                                        </div>
+                                    </div>
+                                    <div class="thermometer-stem">
+                                        <div class="thermometer-fill"></div>
+                                    </div>
+                                </div>
+                                <div class="risk-score">0</div>
+                            </div>
+                            <p class="risk-explanation" id="riskExplanation"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay">
+            <div class="loading-content">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">Analyzing market data...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+</html>
