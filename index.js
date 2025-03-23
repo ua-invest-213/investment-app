@@ -39,7 +39,7 @@ const genAI = new GoogleGenerativeAI("AIzaSyCu7_lNOEGQfPdY2kLcJXHXFB7we6kbeC0");
 
 // Initialize OpenAI
 const configuration = new Configuration({
-    apiKey: process.env.OPENAI_API_KEY,
+    apiKey: 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,
 });
 const openai = new OpenAIApi(configuration);
 
