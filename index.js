@@ -13,6 +13,8 @@ import { createRequire } from 'module';
 import { NlpManager } from 'node-nlp';
 import nlp from 'compromise';
 import rateLimit from 'express-rate-limit';
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Configuration, OpenAIApi } from 'openai';
 const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,12 +35,16 @@ const finnhubClient = new finnhub.DefaultApi()
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI("AIzaSyCu7_lNOEGQfPdY2kLcJXHXFB7we6kbeC0");
 
+// Initialize OpenAI
+const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
-
-const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+// Initialize Gemini model
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const limiter = rateLimit({
     windowMs: 60 * 1000,
@@ -183,12 +189,13 @@ app.get('/api/stock-prices', (req, res) => {
     res.json(stockPriceCache);
 });
 
-// Add new endpoint for sentiment analysis
+// Update sentiment analysis endpoint
 app.post('/api/stock/:ticker/sentiment', async(req, res) => {
     const ticker = req.params.ticker;
+    const modelType = req.body.modelType || 'gemini-2.0-flash';
     
     try {
-        console.log(`Fetching news for sentiment analysis of ${ticker}`);
+        console.log(`Fetching news for sentiment analysis of ${ticker} using ${modelType}`);
         
         // Get current date and date 14 days ago
         const endDate = new Date().toISOString().split('T')[0];
@@ -229,13 +236,27 @@ ${newsContext}
 
 Please be specific and avoid generic market commentary. Focus on concrete information from the articles.`;
 
-        // Generate sentiment analysis
-        const result = await model.generateContent(prompt);
-        const response = await result.response;
+        let sentiment;
+        if (modelType === 'gpt-4') {
+            // Use ChatGPT-4
+            const completion = await openai.createChatCompletion({
+                model: "gpt-4",
+                messages: [{ role: "user", content: prompt }],
+                temperature: 0.7,
+                max_tokens: 150
+            });
+            sentiment = completion.data.choices[0].message.content;
+        } else {
+            // Use Gemini
+            const result = await geminiModel.generateContent(prompt);
+            const response = await result.response;
+            sentiment = response.text();
+        }
         
         res.json({ 
-            sentiment: response.text(),
+            sentiment,
             prompt,
+            modelType,
             newsLinks: newsData.slice(0, 5).map(article => ({
                 url: article.url,
                 headline: article.headline,
@@ -309,7 +330,7 @@ RISK_SCORE: [number]
 EXPLANATION: [2-3 sentences]`;
 
         // Generate risk analysis using Gemini
-        const result = await model.generateContent(prompt);
+        const result = await geminiModel.generateContent(prompt);
         const response = await result.response;
         const analysis = response.text();
         

@@ -58,11 +58,13 @@ async function search() {
         document.getElementById('profileData').innerHTML = profileHtml;
 
         // Fetch and display sentiment analysis
+        const modelType = document.getElementById('modelSelect').value;
         const sentimentResponse = await fetch(`/api/stock/${ticker}/sentiment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ modelType })
         });
         
         if (!sentimentResponse.ok) {
@@ -75,10 +77,11 @@ async function search() {
         if (!sentimentData || !sentimentData.sentiment) {
             document.getElementById('newsData').innerHTML = '<p>Unable to analyze market sentiment</p>';
         } else {
+            const modelName = modelType === 'gpt-4' ? 'ChatGPT 4' : 'Gemini 2.0 Flash';
             const sentimentHtml = `
                 <div class="sentiment-analysis">
                     <div class="model-analysis">
-                        <h2>Market Sentiment Analysis</h2>
+                        <h2>Market Sentiment Analysis (${modelName})</h2>
                         <p class="sentiment-text">${sentimentData.sentiment}</p>
                     </div>
                 </div>

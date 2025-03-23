@@ -625,3 +625,25 @@ body {
 #profileData a:hover {
     text-decoration: underline;
 }
+
+.model-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+    color: #333;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.model-select:hover {
+    border-color: #007bff;
+}
+
+.model-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}

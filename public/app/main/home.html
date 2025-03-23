@@ -126,8 +126,12 @@
                     <div class="card-body">
                         <h5 class="card-title">Company Search</h5>
                         <div class="search-container">
-                            <input type="text" id="tickerInput" class="form-control" placeholder="Enter ticker symbol (e.g., AAPL)">
-                            <button onclick="search()" class="btn btn-primary">Search</button>
+                            <input type="text" id="tickerInput" placeholder="Enter stock symbol (e.g., AAPL)">
+                            <select id="modelSelect" class="model-select">
+                                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                <option value="gpt-4">ChatGPT 4</option>
+                            </select>
+                            <button onclick="search()">Search</button>
                         </div>
                         <div id="error" class="error" style="display: none;"></div>
                         <div id="profileData" class="data-section">
