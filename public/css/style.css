@@ -12,7 +12,7 @@ body {
     background-color: #242424;
     border-bottom: 1px solid #333;
     position: fixed;
-    top: 0;
+    top: 60px; /* Adjust to place it below the navbar */
     z-index: 1000;
 }
 
@@ -77,7 +77,7 @@ body {
 
 .main-content {
     padding: 20px;
-    margin-top: 60px;
+    margin-top: 120px; /* Adjust based on the combined height of navbar and ticker */
 }
 
 .top-section {
@@ -689,4 +689,73 @@ body {
 .peer-name {
     font-size: 0.9em;
     color: #e0e0e0;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #242424;
+    color: #e0e0e0;
+    z-index: 1100;
+    border-bottom: 1px solid #333;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.navbar-logo img {
+    height: 40px;
+    width: auto;
+}
+
+/* Double the size of the SVG logo */
+.navbar-logo img {
+    width: 80px; /* Double the original width */
+    height: 80px; /* Double the original height */
+    max-width: 100%; /* Ensure it doesn't exceed its container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.navbar-links {
+    display: flex;
+    gap: 15px;
+}
+
+.navbar-link {
+    color: #00ff9d;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar-link:hover {
+    color: #00cc7d;
+}
+
+/* Green Bar in Navbar */
+.navbar-title {
+    flex: 1; /* Fills the space between the logo and links */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #00ff9d; /* Green background */
+    color: #242424; /* Dark text color */
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 0 15px; /* Add spacing between the logo and links */
+    text-align: center;
+    white-space: nowrap; /* Prevent text wrapping */
 }

@@ -8,6 +8,24 @@
     <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <!-- Logo -->
+            <div class="navbar-logo">
+                <img src="/assets/STICK-01.svg" alt="Website Logo">
+            </div>
+            <!-- Green Bar -->
+        <div class="navbar-title">
+            <span>UA STOCK TICKER</span>
+        </div>
+            <!-- Links -->
+            <div class="navbar-links">
+                <a href="https://www.instagram.com/artificialintelligencebama/" target="_blank" class="navbar-link"><strong>Instagram</strong></a>
+                <a href="https://uaaiclub.org/" target="_blank" class="navbar-link"><strong>UA AI CLUB</strong></a>
+            </div>
+        </div>
+    </nav>
     <!-- Ticker Section -->
     <div class="ticker-container">
         <div class="ticker-wrapper">
@@ -179,7 +197,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Company Search</h5>
+                        <h5 class="card-title"><strong>Company Search</strong></h5>
                         <div class="search-container">
                             <input type="text" id="tickerInput" placeholder="Enter stock symbol (e.g., AAPL)">
                             <select id="modelSelect" class="model-select">
@@ -202,7 +220,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Market Sentiment Analysis</h5>
+                        <h5 class="card-title"><strong>Market Sentiment Analysis</strong></h5>
                         <div id="newsData">Enter a stock symbol to see market sentiment analysis.</div>
                         <div class="prompt-toggle-container">
                             <button id="showPromptBtn" class="btn btn-link">Show Analysis Prompt</button>
@@ -218,7 +236,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Peer Companies</h5>
+                        <h5 class="card-title"><strong>Peer Companies</strong></h5>
                         <div id="peersData">Enter a stock symbol to see peer companies.</div>
                     </div>
                 </div>
@@ -230,7 +248,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Investment Risk Analysis</h5>
+                        <h5 class="card-title"><strong>Investment Risk Analysis</strong></h5>
                         <div class="risk-thermometer">
                             <div class="thermometer-container">
                                 <div class="thermometer">

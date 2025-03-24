@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #375d44;
+      }
+
+      .cls-2 {
+        fill: #394c3f;
+      }
+
+      .cls-3 {
+        fill: #2db35a;
+      }
+
+      .cls-4 {
+        fill: #258c79;
+      }
+
+      .cls-5 {
+        fill: #29d563;
+      }
+
+      .cls-6 {
+        fill: #3b3b3b;
+      }
+
+      .cls-7 {
+        fill: #18bc9f;
+      }
+
+      .cls-8 {
+        fill: #319151;
+      }
+
+      .cls-9 {
+        fill: #325b54;
+      }
+
+      .cls-10 {
+        fill: #fff;
+      }
+
+      .cls-11 {
+        fill: #356e48;
+      }
+
+      .cls-12 {
+        fill: #1dac92;
+      }
+    </style>
+  </defs>
+  <rect class="cls-10" x="275" y="365" width="1150" height="350"/>
+  <g>
+    <rect class="cls-6" x="325" y="412" width="200" height="50"/>
+    <rect class="cls-6" x="325" y="462" width="50" height="50"/>
+    <rect class="cls-6" x="325" y="512" width="200" height="50"/>
+    <rect class="cls-6" x="475" y="562" width="50" height="50"/>
+    <rect class="cls-6" x="325" y="612" width="200" height="50"/>
+    <rect class="cls-6" x="775" y="412" width="200" height="50"/>
+    <rect class="cls-6" x="775" y="537" width="200" height="50" transform="translate(313 1437) rotate(-90)"/>
+    <rect class="cls-6" x="775" y="612" width="200" height="50"/>
+    <rect class="cls-6" x="1075" y="512" width="250" height="50" transform="translate(663 1737) rotate(-90)"/>
+    <rect class="cls-6" x="1325" y="612" width="50" height="50"/>
+    <rect class="cls-6" x="1275" y="562" width="50" height="50"/>
+    <rect class="cls-6" x="1225" y="512" width="50" height="50"/>
+    <rect class="cls-6" x="1325" y="412" width="50" height="50" transform="translate(913 1787) rotate(-90)"/>
+    <rect class="cls-6" x="1275" y="462" width="50" height="50" transform="translate(813 1787) rotate(-90)"/>
+    <rect class="cls-9" x="975" y="412" width="50" height="50" transform="translate(2000 874) rotate(180)"/>
+    <rect class="cls-4" x="1025" y="412" width="50" height="50" transform="translate(2100 874) rotate(180)"/>
+    <rect class="cls-12" x="1075" y="412" width="50" height="50" transform="translate(2200 874) rotate(180)"/>
+    <rect class="cls-7" x="1125" y="412" width="50" height="50" transform="translate(2300 874) rotate(180)"/>
+    <rect class="cls-4" x="975" y="462" width="50" height="50"/>
+    <rect class="cls-7" x="975" y="512" width="50" height="50"/>
+    <rect class="cls-4" x="975" y="562" width="50" height="50"/>
+    <rect class="cls-9" x="975" y="612" width="50" height="50" transform="translate(2000 1274) rotate(180)"/>
+    <rect class="cls-4" x="1025" y="612" width="50" height="50" transform="translate(2100 1274) rotate(180)"/>
+    <rect class="cls-12" x="1075" y="612" width="50" height="50" transform="translate(2200 1274) rotate(180)"/>
+    <rect class="cls-7" x="1125" y="612" width="50" height="50" transform="translate(2300 1274) rotate(180)"/>
+    <rect class="cls-6" x="550" y="487" width="200" height="50" transform="translate(1162 -138) rotate(90)"/>
+    <rect class="cls-11" x="575" y="412" width="50" height="50"/>
+    <rect class="cls-8" x="625" y="612" width="50" height="50" transform="translate(1300 1274) rotate(180)"/>
+    <rect class="cls-11" x="675" y="412" width="50" height="50"/>
+    <rect class="cls-5" x="525" y="412" width="50" height="50"/>
+    <rect class="cls-5" x="725" y="412" width="50" height="50"/>
+    <rect class="cls-11" x="625" y="562" width="50" height="50" transform="translate(1300 1174) rotate(180)"/>
+    <rect class="cls-2" x="625" y="512" width="50" height="50" transform="translate(1300 1074) rotate(180)"/>
+    <rect class="cls-2" x="625" y="462" width="50" height="50" transform="translate(1300 974) rotate(180)"/>
+    <rect class="cls-11" x="625" y="462" width="50" height="50" transform="translate(1137 -163) rotate(90)"/>
+    <rect class="cls-8" x="625" y="512" width="50" height="50" transform="translate(1187 -113) rotate(90)"/>
+    <rect class="cls-3" x="625" y="562" width="50" height="50" transform="translate(1237 -63) rotate(90)"/>
+    <rect class="cls-1" x="625" y="412" width="50" height="50" transform="translate(1087 -213) rotate(90)"/>
+    <rect class="cls-5" x="625" y="612" width="50" height="50"/>
+  </g>
+  <g>
+    <rect class="cls-10" x="1175" y="315" width="50" height="50" transform="translate(860 1540) rotate(-90)"/>
+    <g>
+      <rect class="cls-10" x="1225" y="315" width="50" height="50" transform="translate(910 1590) rotate(-90)"/>
+      <rect class="cls-10" x="1275" y="315" width="50" height="50" transform="translate(960 1640) rotate(-90)"/>
+      <rect class="cls-10" x="1325" y="315" width="50" height="50" transform="translate(1010 1690) rotate(-90)"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-10" x="1425" y="412" width="50" height="50"/>
+    <g>
+      <rect class="cls-10" x="1425" y="462" width="50" height="50"/>
+      <rect class="cls-10" x="1425" y="512" width="50" height="50"/>
+      <rect class="cls-10" x="1425" y="562" width="50" height="50"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-10" x="475" y="715" width="50" height="50" transform="translate(1240 240) rotate(90)"/>
+    <g>
+      <rect class="cls-10" x="425" y="715" width="50" height="50" transform="translate(1190 290) rotate(90)"/>
+      <rect class="cls-10" x="375" y="715" width="50" height="50" transform="translate(1140 340) rotate(90)"/>
+      <rect class="cls-10" x="325" y="715" width="50" height="50" transform="translate(1090 390) rotate(90)"/>
+    </g>
+  </g>
+  <g>
+    <rect class="cls-10" x="225" y="613" width="50" height="50" transform="translate(500 1276) rotate(180)"/>
+    <g>
+      <rect class="cls-10" x="225" y="563" width="50" height="50" transform="translate(500 1176) rotate(180)"/>
+      <rect class="cls-10" x="225" y="513" width="50" height="50" transform="translate(500 1076) rotate(180)"/>
+      <rect class="cls-10" x="225" y="463" width="50" height="50" transform="translate(500 976) rotate(180)"/>
+    </g>
+  </g>
+</svg>
