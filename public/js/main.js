@@ -50,7 +50,7 @@ async function search() {
             <p><strong>Currency:</strong> ${data.currency || 'N/A'}</p>
             <p><strong>Country:</strong> ${data.country || 'N/A'}</p>
             <p><strong>Market Cap:</strong> ${formatMarketCap(data.marketCapitalization)}</p>
-            <p><strong>Share Outstanding:</strong> ${data.shareOutstanding ? (data.shareOutstanding / 1000000).toFixed(2) + 'M' : 'N/A'}</p>
+            <p><strong>Share Outstanding:</strong> ${data.shareOutstanding ? (data.shareOutstanding).toFixed(2) + 'M' : 'N/A'}</p>
             <p><strong>IPO Date:</strong> ${data.ipo ? new Date(data.ipo).toLocaleDateString() : 'N/A'}</p>
             <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
             <p><strong>Website:</strong> ${data.weburl ? `<a href="${data.weburl}" target="_blank">${data.weburl}</a>` : 'N/A'}</p>
