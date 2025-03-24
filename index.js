@@ -14,7 +14,7 @@ import { NlpManager } from 'node-nlp';
 import nlp from 'compromise';
 import rateLimit from 'express-rate-limit';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -38,10 +38,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 const genAI = new GoogleGenerativeAI("AIzaSyCu7_lNOEGQfPdY2kLcJXHXFB7we6kbeC0");
 
 // Initialize OpenAI
-const configuration = new Configuration({
-    apiKey: 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,
+const openai = new OpenAI({
+    apiKey: "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"
 });
-const openai = new OpenAIApi(configuration);
 
 // Initialize Gemini model
 const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
@@ -55,9 +54,13 @@ const limiter = rateLimit({
 app.use('/api/', limiter);
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', '/app/main/','home.html'));
+    res.sendFile(path.join(__dirname, 'public', '/app/main/', 'home.html'));
 });
-
+/*
+app.get('/ticker-image/:ticker', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', '/assets/ticker_icons/',`${req.params.ticker}.png`));
+});
+*/
 app.get('/api/stock/:ticker', async(req, res) => {
     const ticker = req.params.ticker;
     
@@ -239,13 +242,13 @@ Please be specific and avoid generic market commentary. Focus on concrete inform
         let sentiment;
         if (modelType === 'gpt-4') {
             // Use ChatGPT-4
-            const completion = await openai.createChatCompletion({
+            const completion = await openai.chat.completions.create({
                 model: "gpt-4",
                 messages: [{ role: "user", content: prompt }],
                 temperature: 0.7,
                 max_tokens: 150
             });
-            sentiment = completion.data.choices[0].message.content;
+            sentiment = completion.choices[0].message.content;
         } else {
             // Use Gemini
             const result = await geminiModel.generateContent(prompt);
@@ -345,6 +348,54 @@ EXPLANATION: [2-3 sentences]`;
         });
     } catch (error) {
         console.error(`Server Error analyzing risk for ${ticker}:`, error);
+        res.status(500).json({ 
+            error: error.message,
+            ticker: ticker
+        });
+    }
+});
+
+// Add peer analysis endpoint
+app.post('/api/stock/:ticker/peers', async(req, res) => {
+    const ticker = req.params.ticker;
+    
+    try {
+        console.log(`Analyzing peers for ${ticker}`);
+        
+        // Get company profile for context
+        const profileData = await new Promise((resolve, reject) => {
+            finnhubClient.companyProfile2({'symbol': ticker}, (error, data, response) => {
+                if (error) reject(error);
+                else resolve(data);
+            });
+        });
+
+        const prompt = `Based on the following company information, list the top 5 direct competitors of ${ticker}. 
+For each competitor, provide their ticker symbol and company name.
+
+Company Information:
+- Name: ${profileData.name}
+- Industry: ${profileData.finnhubIndustry}
+- Country: ${profileData.country}
+- Currency: ${profileData.currency}
+
+IMPORTANT: Return ONLY a raw JSON array of objects with 'ticker' and 'name' properties. Do not include any markdown formatting, code blocks, or additional text. The response should be valid JSON that can be parsed directly.
+
+Example format:
+[{"ticker": "XXX", "name": "Company Name"}, {"ticker": "YYY", "name": "Another Company"}]`;
+
+        // Generate peer analysis using Gemini
+        const result = await geminiModel.generateContent(prompt);
+        const response = await result.response;
+        const responseText = response.text().trim();
+        
+        // Clean the response text to ensure it's valid JSON
+        const cleanResponse = responseText.replace(/```json\n?|\n?```/g, '').trim();
+        const peers = JSON.parse(cleanResponse);
+        
+        res.json({ peers });
+    } catch (error) {
+        console.error(`Server Error analyzing peers for ${ticker}:`, error);
         res.status(500).json({ 
             error: error.message,
             ticker: ticker

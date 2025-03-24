@@ -2,9 +2,9 @@ let currentPrompt = '';
 
 function formatMarketCap(value) {
     if (!value) return 'N/A';
-    
+
     const valueInMillions = value;
-    
+
     if (valueInMillions >= 1000000) {
         return `$${(valueInMillions / 1000000).toFixed(2)}T`;
     } else if (valueInMillions >= 1000) {
@@ -39,9 +39,9 @@ async function search() {
         if (!response.ok) {
             throw new Error('Failed to fetch company data');
         }
-        
+
         const data = await response.json();
-        
+
         // Display company profile
         const profileHtml = `
             <h2>${data.name} (${data.ticker})</h2>
@@ -66,13 +66,13 @@ async function search() {
             },
             body: JSON.stringify({ modelType })
         });
-        
+
         if (!sentimentResponse.ok) {
             throw new Error('Failed to fetch sentiment analysis');
         }
-        
+
         const sentimentData = await sentimentResponse.json();
-        
+
         // Display sentiment analysis
         if (!sentimentData || !sentimentData.sentiment) {
             document.getElementById('newsData').innerHTML = '<p>Unable to analyze market sentiment</p>';
@@ -87,7 +87,7 @@ async function search() {
                 </div>
             `;
             document.getElementById('newsData').innerHTML = sentimentHtml;
-            
+
             // Store the prompt from the server response
             currentPrompt = sentimentData.prompt;
         }
@@ -100,27 +100,27 @@ async function search() {
                     'Content-Type': 'application/json'
                 }
             });
-            
+
             if (!riskResponse.ok) {
                 throw new Error('Failed to fetch risk analysis');
             }
-            
+
             const riskData = await riskResponse.json();
-            
+
             // Update thermometer
             const thermometerFill = document.querySelector('.thermometer-fill');
             const riskScore = document.querySelector('.risk-score');
             const riskExplanation = document.getElementById('riskExplanation');
-            
+
             // Set the fill height based on risk score
             thermometerFill.style.height = `${riskData.riskScore}%`;
-            
+
             // Update the score display
             riskScore.textContent = riskData.riskScore;
-            
+
             // Update the explanation
             riskExplanation.textContent = riskData.explanation;
-            
+
             // Update thermometer color based on risk level
             thermometerFill.classList.remove('low-risk', 'medium-risk', 'high-risk');
             if (riskData.riskScore <= 33) {
@@ -139,12 +139,52 @@ async function search() {
             } else {
                 companyLogo.style.display = 'none';
             }
-            
+
         } catch (err) {
             console.error('Error fetching risk analysis:', err);
             document.getElementById('riskExplanation').textContent = 'Unable to analyze investment risk';
             // Hide logo on error
             document.getElementById('companyLogo').style.display = 'none';
+        }
+
+        // Fetch and display peer companies
+        const peersResponse = await fetch(`/api/stock/${ticker}/peers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!peersResponse.ok) {
+            throw new Error('Failed to fetch peer companies');
+        }
+
+        const peersData = await peersResponse.json();
+
+        // Display peer companies
+        if (!peersData || !peersData.peers) {
+            document.getElementById('peersData').innerHTML = '<p>Unable to fetch peer companies</p>';
+        } else {
+            const peersHtml = `
+                <div class="peers-container">
+                    <h3>Direct Competitors</h3>
+                    <div class="peers-list">
+                        ${peersData.peers.map(peer => `
+                            <div class="peer-item">
+                                <img src="https://static2.finnhub.io/file/publicdatany/finnhubimage/stock_logo/${peer.ticker}.png" 
+                                     alt="${peer.name} logo" 
+                                     onerror="request_new_image('${peer.ticker}')"
+                                     class="peer-logo" id="peer-logo-${peer.ticker}">
+                                <div class="peer-info">
+                                    <span class="peer-ticker">${peer.ticker}</span>
+                                    <span class="peer-name">${peer.name}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            document.getElementById('peersData').innerHTML = peersHtml;
         }
 
     } catch (err) {
@@ -169,18 +209,18 @@ async function fetchInitialPrices() {
     try {
         const response = await fetch('/api/stock-prices');
         const priceData = await response.json();
-        
+
         Object.entries(priceData).forEach(([symbol, data]) => {
             const tickerItems = document.querySelectorAll('.ticker-item');
             tickerItems.forEach(item => {
                 if (item.getAttribute('data-symbol') === symbol) {
                     const priceElement = item.querySelector('.ticker-price');
                     const changeElement = item.querySelector('.ticker-change');
-                    
+
                     if (priceElement) {
                         priceElement.textContent = `$${data.price.toFixed(2)}`;
                     }
-                    
+
                     if (changeElement && data.percentChange !== undefined) {
                         const changeText = data.percentChange >= 0 ? '↑' : '↓';
                         changeElement.textContent = `${changeText} ${Math.abs(data.percentChange).toFixed(2)}%`;
@@ -195,7 +235,7 @@ async function fetchInitialPrices() {
 }
 
 // Initialize when the page loads
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     await fetchInitialPrices();
     // Refresh prices every 10 minutes
     setInterval(fetchInitialPrices, 10 * 60 * 1000);
@@ -204,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     const promptContainer = document.getElementById('promptContainer');
     const promptText = document.querySelector('.prompt-text');
 
-    showPromptBtn.addEventListener('click', function() {
+    showPromptBtn.addEventListener('click', function () {
         if (promptContainer.style.display === 'none') {
             promptContainer.style.display = 'block';
             promptText.textContent = currentPrompt;
@@ -215,3 +255,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 });
+
+async function request_new_image(ticker) {
+    console.log(`Requesting new image for ${ticker}`);
+    
+    const response = await fetch(`/api/stock/${ticker}`);
+    if (!response.ok) {
+        throw new Error('Failed to fetch company data');
+    }
+
+    const data = await response.json();
+    document.getElementById(`peer-logo-${ticker}`).src = data.logo;
+}

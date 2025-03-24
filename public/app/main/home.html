@@ -147,37 +147,31 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Market Data</h5>
-                        <div id="newsData" class="data-section">
-                            <div class="placeholder-content">
-                                <p>Market sentiment analysis will appear here...</p>
-                            </div>
-                        </div>
+                        <h5 class="card-title">Market Sentiment Analysis</h5>
+                        <div id="newsData">Enter a stock symbol to see market sentiment analysis.</div>
                         <div class="prompt-toggle-container">
-                            <button id="showPromptBtn">Show Prompt</button>
+                            <button id="showPromptBtn" class="btn btn-link">Show Analysis Prompt</button>
                             <div id="promptContainer" style="display: none;">
-                                <pre class="prompt-text" id="promptText"></pre>
+                                <pre class="prompt-text"></pre>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Right Column - Peer Stocks -->
+            <!-- Right Column - Peer Companies -->
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Peer Companies</h5>
-                        <div class="placeholder-content">
-                            <p>Peer company stock information will appear here...</p>
-                        </div>
+                        <div id="peersData">Enter a stock symbol to see peer companies.</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Bottom Section -->
-        <div class="row bottom-section">
+        <!-- Bottom Section - Risk Analysis -->
+        <div class="row mt-4">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -196,7 +190,7 @@
                                 </div>
                                 <div class="risk-score">0</div>
                             </div>
-                            <p class="risk-explanation" id="riskExplanation"></p>
+                            <center><p class="risk-explanation" id="riskExplanation"></p></center>
                         </div>
                     </div>
                 </div>
