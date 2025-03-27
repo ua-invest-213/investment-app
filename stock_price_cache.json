@@ -1,52 +1,52 @@
 {
   "AAPL": {
-    "price": 224.77,
-    "percentChange": 1.4625558615086034,
-    "lastUpdated": "2025-03-27T19:30:27.622Z"
+    "price": 224.96,
+    "percentChange": 1.5483230262266992,
+    "lastUpdated": "2025-03-27T19:50:02.055Z"
   },
   "MSFT": {
-    "price": 392.0142,
-    "percentChange": 0.5241941687822113,
-    "lastUpdated": "2025-03-27T19:30:27.787Z"
+    "price": 391.7,
+    "percentChange": 0.4436238685026954,
+    "lastUpdated": "2025-03-27T19:50:02.233Z"
   },
   "GOOGL": {
-    "price": 163.06,
-    "percentChange": -1.211680600993578,
-    "lastUpdated": "2025-03-27T19:30:27.943Z"
+    "price": 162.88,
+    "percentChange": -1.3207318550830043,
+    "lastUpdated": "2025-03-27T19:50:02.390Z"
   },
   "AMZN": {
-    "price": 202.52,
-    "percentChange": 0.6910953114900884,
-    "lastUpdated": "2025-03-27T19:30:28.153Z"
+    "price": 201.86,
+    "percentChange": 0.3629493362501955,
+    "lastUpdated": "2025-03-27T19:50:02.561Z"
   },
   "META": {
-    "price": 607.27,
-    "percentChange": -0.607221185636197,
-    "lastUpdated": "2025-03-27T19:30:28.379Z"
+    "price": 604.855,
+    "percentChange": -1.0024878064748437,
+    "lastUpdated": "2025-03-27T19:50:02.757Z"
   },
   "NVDA": {
-    "price": 112.66,
-    "percentChange": -0.9669479606188542,
-    "lastUpdated": "2025-03-27T19:30:28.500Z"
+    "price": 111.88,
+    "percentChange": -1.6526019690576739,
+    "lastUpdated": "2025-03-27T19:50:02.929Z"
   },
   "TSLA": {
-    "price": 278.1626,
-    "percentChange": 2.2431081379107534,
-    "lastUpdated": "2025-03-27T19:30:28.633Z"
+    "price": 276.88,
+    "percentChange": 1.771668014408584,
+    "lastUpdated": "2025-03-27T19:50:03.098Z"
   },
   "JPM": {
-    "price": 250.11,
-    "percentChange": -0.3664900609488856,
-    "lastUpdated": "2025-03-27T19:30:28.818Z"
+    "price": 249.14,
+    "percentChange": -0.7528980599928354,
+    "lastUpdated": "2025-03-27T19:50:03.223Z"
   },
   "V": {
-    "price": 350.34,
-    "percentChange": 1.7897611714800303,
-    "lastUpdated": "2025-03-27T19:30:29.007Z"
+    "price": 350.12,
+    "percentChange": 1.7258411296414662,
+    "lastUpdated": "2025-03-27T19:50:03.398Z"
   },
   "WMT": {
     "price": 85.98,
     "percentChange": 0.9036498063607679,
-    "lastUpdated": "2025-03-27T19:30:29.169Z"
+    "lastUpdated": "2025-03-27T19:50:03.578Z"
   }
 }

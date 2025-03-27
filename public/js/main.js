@@ -16,12 +16,40 @@ function formatMarketCap(value) {
     }
 }
 
+function toggleTokenInput() {
+    const modelSelect = document.getElementById('modelSelect');
+    const tokenContainer = document.getElementById('tokenContainer');
+    const tokenInput = document.getElementById('openAIToken');
+    
+    if (modelSelect.value === 'gpt-4') {
+        tokenContainer.style.display = 'block';
+        tokenInput.required = true;
+    } else {
+        tokenContainer.style.display = 'none';
+        tokenInput.required = false;
+        tokenInput.value = '';
+    }
+}
+
 async function search() {
     const ticker = document.getElementById('tickerInput').value.toUpperCase();
     if (!ticker) {
         showError('Please enter a stock symbol');
         return;
     }
+
+    const modelType = document.getElementById('modelSelect').value;
+    const tokenInput = document.getElementById('openAIToken');
+    
+    if (modelType === 'gpt-4') {
+        if (!tokenInput.value) {
+            showError('Please enter your OpenAI API token');
+            return;
+        }
+    }
+
+    // Clear any existing error message
+    document.getElementById('error').style.display = 'none';
 
     document.querySelector('.loading-overlay').classList.add('active');
 
@@ -53,17 +81,25 @@ async function search() {
         `;
         document.getElementById('profileData').innerHTML = profileHtml;
 
-        const modelType = document.getElementById('modelSelect').value;
         const sentimentResponse = await fetch(`/api/stock/${ticker}/sentiment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ modelType })
+            body: JSON.stringify({ 
+                modelType,
+                openAIToken: modelType === 'gpt-4' ? tokenInput.value : undefined
+            })
         });
 
         if (!sentimentResponse.ok) {
-            throw new Error('Failed to fetch sentiment analysis');
+            const errorData = await sentimentResponse.json();
+            if (sentimentResponse.status === 401) {
+                showError('Invalid OpenAI API token. Please check your token and try again.');
+                tokenInput.value = ''; // Clear the invalid token
+                return;
+            }
+            throw new Error(errorData.message || 'Failed to fetch sentiment analysis');
         }
 
         const sentimentData = await sentimentResponse.json();
@@ -159,7 +195,7 @@ async function search() {
                                      onerror="request_new_image('${peer.ticker}')"
                                      class="peer-logo" id="peer-logo-${peer.ticker}">
                                 <div class="peer-info">
-                                    <span class="peer-ticker">${peer.ticker}</span>
+                                    <span class="peer-ticker" onclick="searchForTicker('${peer.ticker}')" style="cursor: pointer;">${peer.ticker}</span>
                                     <span class="peer-name">${peer.name}</span>
                                 </div>
                             </div>
@@ -245,4 +281,9 @@ async function request_new_image(ticker) {
 
     const data = await response.json();
     document.getElementById(`peer-logo-${ticker}`).src = data.logo;
+}
+
+function searchForTicker(ticker) {
+    document.getElementById('tickerInput').value = ticker;
+    search();
 }

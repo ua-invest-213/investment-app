@@ -37,9 +37,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const genAI = new GoogleGenerativeAI("AIzaSyCu7_lNOEGQfPdY2kLcJXHXFB7we6kbeC0");
 
-const openai = new OpenAI({
-    apiKey: "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"
-});
 const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const limiter = rateLimit({
@@ -182,6 +179,7 @@ app.get('/api/stock-prices', (req, res) => {
 app.post('/api/stock/:ticker/sentiment', async(req, res) => {
     const ticker = req.params.ticker;
     const modelType = req.body.modelType || 'gemini-2.0-flash';
+    const openAIToken = req.body.openAIToken;
     
     try {
         console.log(`Fetching news for sentiment analysis of ${ticker} using ${modelType}`);
@@ -225,13 +223,28 @@ Please be specific and avoid generic market commentary. Focus on concrete inform
 
         let sentiment;
         if (modelType === 'gpt-4') {
-            const completion = await openai.chat.completions.create({
-                model: "gpt-4",
-                messages: [{ role: "user", content: prompt }],
-                temperature: 0.7,
-                max_tokens: 150
-            });
-            sentiment = completion.choices[0].message.content;
+            if (!openAIToken) {
+                return res.status(400).json({ error: 'OpenAI API token is required for GPT-4' });
+            }
+
+            try {
+                const openai = new OpenAI({
+                    apiKey: openAIToken
+                });
+
+                const completion = await openai.chat.completions.create({
+                    model: "gpt-4",
+                    messages: [{ role: "user", content: prompt }],
+                    temperature: 0.7,
+                    max_tokens: 150
+                });
+                sentiment = completion.choices[0].message.content;
+            } catch (error) {
+                if (error.response?.status === 401) {
+                    return res.status(401).json({ error: 'Invalid OpenAI API token' });
+                }
+                throw error;
+            }
         } else {
             const result = await geminiModel.generateContent(prompt);
             const response = await result.response;

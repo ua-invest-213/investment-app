@@ -109,10 +109,12 @@ body {
     display: flex;
     gap: 10px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 .search-container input {
     flex: 1;
+    min-width: 200px;
     background-color: #2a2a2a;
     border: 1px solid #444;
     color: #e0e0e0;
@@ -135,6 +137,7 @@ body {
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     font-weight: 500;
+    min-width: 100px;
 }
 
 .search-container button:hover {
@@ -207,6 +210,14 @@ body {
     
     .search-container {
         flex-direction: column;
+        gap: 10px;
+    }
+    
+    .search-container input,
+    .search-container button,
+    .model-select {
+        width: 100%;
+        margin: 0;
     }
     
     .search-container button {
@@ -621,6 +632,7 @@ body {
     margin: 0 10px;
     cursor: pointer;
     transition: border-color 0.3s ease;
+    min-width: 150px;
 }
 
 .model-select:hover {
@@ -684,6 +696,16 @@ body {
 .peer-ticker {
     font-weight: bold;
     color: #00ff9d;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.peer-ticker:hover {
+    background-color: rgba(0, 255, 157, 0.1);
+    transform: translateY(-1px);
 }
 
 .peer-name {
@@ -758,4 +780,35 @@ body {
     margin: 0 15px; /* Add spacing between the logo and links */
     text-align: center;
     white-space: nowrap; /* Prevent text wrapping */
+}
+
+.token-container {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.token-input {
+    width: 100%;
+    background-color: #2a2a2a;
+    border: 1px solid #444;
+    color: #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.token-input:focus {
+    outline: none;
+    border-color: #00ff9d;
+    box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.2);
+}
+
+@media (max-width: 768px) {
+    .token-container {
+        margin-top: 10px;
+    }
+    
+    .token-input {
+        width: 100%;
+    }
 }
