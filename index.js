@@ -91,14 +91,12 @@ app.get('/api/stock/:ticker', async(req, res) => {
     }
 });
 
-// Add new endpoint for company news
 app.get('/api/stock/:ticker/news', async(req, res) => {
     const ticker = req.params.ticker;
     
     try {
         console.log(`Fetching news for ${ticker}`);
         
-        // Get current date and date 30 days ago
         const endDate = new Date().toISOString().split('T')[0];
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 30);
@@ -145,8 +143,7 @@ async function updateStockPrices() {
     
     for (const symbol of tickers) {
         try {
-            // Get quote data which includes previous close and current price
-            const quoteData = await new Promise((resolve, reject) => {
+\            const quoteData = await new Promise((resolve, reject) => {
                 finnhubClient.quote(symbol, (error, data, response) => {
                     if (error) reject(error);
                     else resolve(data);
