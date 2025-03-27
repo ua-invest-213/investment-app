@@ -29,43 +29,35 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Initialize data directory and database
+// Global variables
 let db;
-try {
-    const dataDir = path.join(__dirname, 'data');
-    if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
-    }
-    const adapter = new JSONFile(path.join(dataDir, 'db.json'));
-    db = new Low(adapter, { users: [] });
-    await db.read();
-    await db.write();
-} catch (error) {
-    console.error('Error initializing database:', error);
+let finnhubClient;
+let geminiModel;
+let stockPriceCache = {};
+
+// Initialize data directory
+const dataDir = path.join(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
 }
+
+// Initialize database
+const adapter = new JSONFile(path.join(dataDir, 'db.json'));
+db = new Low(adapter, { users: [] });
+
+// Initialize API clients
+const finnhub = require('finnhub');
+const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+api_key.apiKey = process.env.FINNHUB_API_KEY;
+finnhubClient = new finnhub.DefaultApi();
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Initialize API clients
-let finnhubClient;
-let geminiModel;
-
-try {
-    // Initialize Finnhub client
-    const finnhub = require('finnhub');
-    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-    api_key.apiKey = process.env.FINNHUB_API_KEY;
-    finnhubClient = new finnhub.DefaultApi();
-
-    // Initialize Google Generative AI client
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-} catch (error) {
-    console.error('Error initializing API clients:', error);
-}
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -165,9 +157,8 @@ app.get('/api/stock/:ticker/news', async(req, res) => {
     }
 });
 
-let stockPriceCache = {};
+// Initialize stock price cache
 const CACHE_FILE = path.join(dataDir, 'stock_price_cache.json');
-
 try {
     if (fs.existsSync(CACHE_FILE)) {
         stockPriceCache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
