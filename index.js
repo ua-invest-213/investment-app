@@ -15,6 +15,12 @@ import nlp from 'compromise';
 import rateLimit from 'express-rate-limit';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import OpenAI from 'openai';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
+
 const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,22 +29,32 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-const adapter = new JSONFile('db.json');
+// Ensure the data directory exists
+const dataDir = path.join(__dirname, 'data');
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir);
+}
 
+const adapter = new JSONFile(path.join(dataDir, 'db.json'));
+
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Initialize Finnhub client
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = process.env.FINNHUB_API_KEY;
-const finnhubClient = new finnhub.DefaultApi()
+const finnhubClient = new finnhub.DefaultApi();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Initialize Google Generative AI client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
 const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
+// Rate limiting
 const limiter = rateLimit({
     windowMs: 60 * 1000,
     max: 60,
@@ -47,6 +63,7 @@ const limiter = rateLimit({
 
 app.use('/api/', limiter);
 
+// Routes
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', '/app/main/', 'home.html'));
 });
@@ -125,7 +142,7 @@ app.get('/api/stock/:ticker/news', async(req, res) => {
 });
 
 let stockPriceCache = {};
-const CACHE_FILE = path.join(__dirname, 'stock_price_cache.json');
+const CACHE_FILE = path.join(dataDir, 'stock_price_cache.json');
 
 try {
     if (fs.existsSync(CACHE_FILE)) {
@@ -387,6 +404,6 @@ Example format:
     }
 });
 
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
