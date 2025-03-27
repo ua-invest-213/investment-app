@@ -200,11 +200,14 @@
                         <h5 class="card-title"><strong>Company Search</strong></h5>
                         <div class="search-container">
                             <input type="text" id="tickerInput" placeholder="Enter stock symbol (e.g., AAPL)">
-                            <select id="modelSelect" class="model-select">
+                            <select id="modelSelect" class="model-select" onchange="toggleTokenInput()">
                                 <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
                                 <option value="gpt-4">ChatGPT 4</option>
                             </select>
                             <button onclick="search()">Search</button>
+                        </div>
+                        <div id="tokenContainer" style="display: none;" class="token-container">
+                            <input type="password" id="openAIToken" placeholder="Enter your OpenAI API token" class="token-input">
                         </div>
                         <div id="error" class="error" style="display: none;"></div>
                         <div id="profileData" class="data-section">
