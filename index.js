@@ -32,10 +32,14 @@ const port = process.env.PORT || 3000;
 // Ensure the data directory exists
 const dataDir = path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir);
+    fs.mkdirSync(dataDir, { recursive: true });
 }
 
+// Initialize database
 const adapter = new JSONFile(path.join(dataDir, 'db.json'));
+const db = new Low(adapter, { users: [] });
+await db.read();
+await db.write();
 
 // Middleware
 app.use(cors());
@@ -63,9 +67,14 @@ const limiter = rateLimit({
 
 app.use('/api/', limiter);
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
 // Routes
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', '/app/main/', 'home.html'));
+    res.sendFile(path.join(__dirname, 'public', 'app', 'main', 'home.html'));
 });
 
 /*
@@ -404,6 +413,6 @@ Example format:
     }
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
 });
