@@ -29,34 +29,46 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Ensure the data directory exists
-const dataDir = path.join(__dirname, 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
+// Initialize data directory and database
+let db;
+try {
+    const dataDir = path.join(__dirname, 'data');
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
+    const adapter = new JSONFile(path.join(dataDir, 'db.json'));
+    db = new Low(adapter, { users: [] });
+    await db.read();
+    await db.write();
+} catch (error) {
+    console.error('Error initializing database:', error);
 }
-
-// Initialize database
-const adapter = new JSONFile(path.join(dataDir, 'db.json'));
-const db = new Low(adapter, { users: [] });
-await db.read();
-await db.write();
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Initialize Finnhub client
-const finnhub = require('finnhub');
-const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-api_key.apiKey = process.env.FINNHUB_API_KEY;
-const finnhubClient = new finnhub.DefaultApi();
+// Initialize API clients
+let finnhubClient;
+let geminiModel;
 
+try {
+    // Initialize Finnhub client
+    const finnhub = require('finnhub');
+    const api_key = finnhub.ApiClient.instance.authentications['api_key'];
+    api_key.apiKey = process.env.FINNHUB_API_KEY;
+    finnhubClient = new finnhub.DefaultApi();
+
+    // Initialize Google Generative AI client
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+} catch (error) {
+    console.error('Error initializing API clients:', error);
+}
+
+// Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Initialize Google Generative AI client
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 // Rate limiting
 const limiter = rateLimit({
@@ -69,10 +81,13 @@ app.use('/api/', limiter);
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'ok' });
+    res.status(200).json({ 
+        status: 'ok',
+        timestamp: new Date().toISOString()
+    });
 });
 
-// Routes
+// Basic route
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'app', 'main', 'home.html'));
 });
@@ -413,6 +428,25 @@ Example format:
     }
 });
 
-app.listen(port, '0.0.0.0', () => {
+// Start server
+const server = app.listen(port, '0.0.0.0', () => {
     console.log(`Server running on port ${port}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+});
+
+// Handle server errors
+server.on('error', (error) => {
+    console.error('Server error:', error);
+});
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+    process.exit(1);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    process.exit(1);
 });
