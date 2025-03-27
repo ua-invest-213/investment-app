@@ -143,7 +143,7 @@ async function updateStockPrices() {
     
     for (const symbol of tickers) {
         try {
-\            const quoteData = await new Promise((resolve, reject) => {
+            const quoteData = await new Promise((resolve, reject) => {
                 finnhubClient.quote(symbol, (error, data, response) => {
                     if (error) reject(error);
                     else resolve(data);
