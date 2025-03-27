@@ -5,8 +5,7 @@
   "description": "Investment application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.0",
@@ -25,9 +24,6 @@
     "node-nlp": "^4.27.0",
     "openai": "^4.89.0",
     "pdfjs-dist": "^4.0.379"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.3"
   },
   "engines": {
     "node": ">=18.0.0"
