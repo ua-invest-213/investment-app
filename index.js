@@ -30,12 +30,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-api_key.apiKey = "cvg5nkpr01qgvsqnn8sgcvg5nkpr01qgvsqnn8t0"
+api_key.apiKey = process.env.FINNHUB_API_KEY;
 const finnhubClient = new finnhub.DefaultApi()
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const genAI = new GoogleGenerativeAI("AIzaSyCu7_lNOEGQfPdY2kLcJXHXFB7we6kbeC0");
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
