@@ -37,12 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const genAI = new GoogleGenerativeAI("AIzaSyCu7_lNOEGQfPdY2kLcJXHXFB7we6kbeC0");
 
-// Initialize OpenAI
 const openai = new OpenAI({
     apiKey: "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"
 });
-
-// Initialize Gemini model
 const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
 
 const limiter = rateLimit({
@@ -56,11 +53,13 @@ app.use('/api/', limiter);
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', '/app/main/', 'home.html'));
 });
+
 /*
 app.get('/ticker-image/:ticker', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', '/assets/ticker_icons/',`${req.params.ticker}.png`));
 });
 */
+
 app.get('/api/stock/:ticker', async(req, res) => {
     const ticker = req.params.ticker;
     
@@ -130,11 +129,9 @@ app.get('/api/stock/:ticker/news', async(req, res) => {
     }
 });
 
-// Cache for stock prices
 let stockPriceCache = {};
 const CACHE_FILE = path.join(__dirname, 'stock_price_cache.json');
 
-// Load cache from file if it exists
 try {
     if (fs.existsSync(CACHE_FILE)) {
         stockPriceCache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
@@ -143,7 +140,6 @@ try {
     console.error('Error loading price cache:', error);
 }
 
-// Function to update stock prices
 async function updateStockPrices() {
     const tickers = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'NVDA', 'TSLA', 'JPM', 'V', 'WMT'];
     
@@ -173,7 +169,6 @@ async function updateStockPrices() {
         }
     }
     
-    // Save cache to file
     try {
         fs.writeFileSync(CACHE_FILE, JSON.stringify(stockPriceCache, null, 2));
     } catch (error) {
@@ -181,18 +176,12 @@ async function updateStockPrices() {
     }
 }
 
-// Update prices every 10 minutes
 setInterval(updateStockPrices, 10 * 60 * 1000);
-
-// Initial update
 updateStockPrices();
-
-// Add new endpoint for cached prices
 app.get('/api/stock-prices', (req, res) => {
     res.json(stockPriceCache);
 });
 
-// Update sentiment analysis endpoint
 app.post('/api/stock/:ticker/sentiment', async(req, res) => {
     const ticker = req.params.ticker;
     const modelType = req.body.modelType || 'gemini-2.0-flash';
@@ -200,7 +189,6 @@ app.post('/api/stock/:ticker/sentiment', async(req, res) => {
     try {
         console.log(`Fetching news for sentiment analysis of ${ticker} using ${modelType}`);
         
-        // Get current date and date 14 days ago
         const endDate = new Date().toISOString().split('T')[0];
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 14);
@@ -221,7 +209,6 @@ app.post('/api/stock/:ticker/sentiment', async(req, res) => {
             });
         });
 
-        // Create a prompt with the news articles
         const newsContext = newsData.slice(0, 5).map(article => 
             `Headline: ${article.headline}\nSummary: ${article.summary || 'No summary available'}\n`
         ).join('\n');
@@ -241,7 +228,6 @@ Please be specific and avoid generic market commentary. Focus on concrete inform
 
         let sentiment;
         if (modelType === 'gpt-4') {
-            // Use ChatGPT-4
             const completion = await openai.chat.completions.create({
                 model: "gpt-4",
                 messages: [{ role: "user", content: prompt }],
@@ -250,7 +236,6 @@ Please be specific and avoid generic market commentary. Focus on concrete inform
             });
             sentiment = completion.choices[0].message.content;
         } else {
-            // Use Gemini
             const result = await geminiModel.generateContent(prompt);
             const response = await result.response;
             sentiment = response.text();
@@ -275,20 +260,17 @@ Please be specific and avoid generic market commentary. Focus on concrete inform
     }
 });
 
-// Add risk analysis endpoint
 app.post('/api/stock/:ticker/risk', async(req, res) => {
     const ticker = req.params.ticker;
     
     try {
         console.log(`Analyzing risk for ${ticker}`);
         
-        // Get current date and date 14 days ago
         const endDate = new Date().toISOString().split('T')[0];
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 14);
         const formattedStartDate = startDate.toISOString().split('T')[0];
         
-        // Get news data
         const newsData = await new Promise((resolve, reject) => {
             finnhubClient.companyNews(ticker, formattedStartDate, endDate, (error, data, response) => {
                 if (error) reject(error);
@@ -296,7 +278,6 @@ app.post('/api/stock/:ticker/risk', async(req, res) => {
             });
         });
 
-        // Get current stock price and historical data
         const quoteData = await new Promise((resolve, reject) => {
             finnhubClient.quote(ticker, (error, data, response) => {
                 if (error) reject(error);
@@ -304,7 +285,6 @@ app.post('/api/stock/:ticker/risk', async(req, res) => {
             });
         });
 
-        // Create a prompt for risk analysis
         const newsContext = newsData.slice(0, 5).map(article => 
             `Headline: ${article.headline}\nSummary: ${article.summary || 'No summary available'}\n`
         ).join('\n');
@@ -332,12 +312,10 @@ Please provide the response in this exact format:
 RISK_SCORE: [number]
 EXPLANATION: [2-3 sentences]`;
 
-        // Generate risk analysis using Gemini
         const result = await geminiModel.generateContent(prompt);
         const response = await result.response;
         const analysis = response.text();
         
-        // Parse the response
         const riskScore = parseInt(analysis.match(/RISK_SCORE:\s*(\d+)/)[1]);
         const explanation = analysis.match(/EXPLANATION:\s*(.*)/)[1].trim();
         
@@ -355,14 +333,12 @@ EXPLANATION: [2-3 sentences]`;
     }
 });
 
-// Add peer analysis endpoint
 app.post('/api/stock/:ticker/peers', async(req, res) => {
     const ticker = req.params.ticker;
     
     try {
         console.log(`Analyzing peers for ${ticker}`);
         
-        // Get company profile for context
         const profileData = await new Promise((resolve, reject) => {
             finnhubClient.companyProfile2({'symbol': ticker}, (error, data, response) => {
                 if (error) reject(error);
@@ -384,12 +360,10 @@ IMPORTANT: Return ONLY a raw JSON array of objects with 'ticker' and 'name' prop
 Example format:
 [{"ticker": "XXX", "name": "Company Name"}, {"ticker": "YYY", "name": "Another Company"}]`;
 
-        // Generate peer analysis using Gemini
         const result = await geminiModel.generateContent(prompt);
         const response = await result.response;
         const responseText = response.text().trim();
         
-        // Clean the response text to ensure it's valid JSON
         const cleanResponse = responseText.replace(/```json\n?|\n?```/g, '').trim();
         const peers = JSON.parse(cleanResponse);
         

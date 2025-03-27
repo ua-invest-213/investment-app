@@ -23,18 +23,15 @@ async function search() {
         return;
     }
 
-    // Show loading overlay
     document.querySelector('.loading-overlay').classList.add('active');
 
     try {
-        // Reset previous data
         document.getElementById('newsData').innerHTML = '';
         document.getElementById('riskExplanation').textContent = '';
         document.querySelector('.risk-score').textContent = '0';
         document.querySelector('.thermometer-fill').style.height = '0%';
         document.getElementById('companyLogo').style.display = 'none';
 
-        // Fetch company profile and sentiment data
         const response = await fetch(`/api/stock/${ticker}`);
         if (!response.ok) {
             throw new Error('Failed to fetch company data');
@@ -42,7 +39,6 @@ async function search() {
 
         const data = await response.json();
 
-        // Display company profile
         const profileHtml = `
             <h2>${data.name} (${data.ticker})</h2>
             <p><strong>Industry:</strong> ${data.finnhubIndustry || 'N/A'}</p>
@@ -57,7 +53,6 @@ async function search() {
         `;
         document.getElementById('profileData').innerHTML = profileHtml;
 
-        // Fetch and display sentiment analysis
         const modelType = document.getElementById('modelSelect').value;
         const sentimentResponse = await fetch(`/api/stock/${ticker}/sentiment`, {
             method: 'POST',
@@ -73,7 +68,6 @@ async function search() {
 
         const sentimentData = await sentimentResponse.json();
 
-        // Display sentiment analysis
         if (!sentimentData || !sentimentData.sentiment) {
             document.getElementById('newsData').innerHTML = '<p>Unable to analyze market sentiment</p>';
         } else {
@@ -88,11 +82,9 @@ async function search() {
             `;
             document.getElementById('newsData').innerHTML = sentimentHtml;
 
-            // Store the prompt from the server response
             currentPrompt = sentimentData.prompt;
         }
 
-        // Fetch and display risk analysis
         try {
             const riskResponse = await fetch(`/api/stock/${ticker}/risk`, {
                 method: 'POST',
@@ -107,21 +99,16 @@ async function search() {
 
             const riskData = await riskResponse.json();
 
-            // Update thermometer
             const thermometerFill = document.querySelector('.thermometer-fill');
             const riskScore = document.querySelector('.risk-score');
             const riskExplanation = document.getElementById('riskExplanation');
 
-            // Set the fill height based on risk score
             thermometerFill.style.height = `${riskData.riskScore}%`;
 
-            // Update the score display
             riskScore.textContent = riskData.riskScore;
 
-            // Update the explanation
             riskExplanation.textContent = riskData.explanation;
 
-            // Update thermometer color based on risk level
             thermometerFill.classList.remove('low-risk', 'medium-risk', 'high-risk');
             if (riskData.riskScore <= 33) {
                 thermometerFill.classList.add('low-risk');
@@ -131,7 +118,6 @@ async function search() {
                 thermometerFill.classList.add('high-risk');
             }
 
-            // Update company logo using the URL from profile data
             const companyLogo = document.getElementById('companyLogo');
             if (data && data.logo) {
                 companyLogo.src = data.logo;
@@ -143,11 +129,9 @@ async function search() {
         } catch (err) {
             console.error('Error fetching risk analysis:', err);
             document.getElementById('riskExplanation').textContent = 'Unable to analyze investment risk';
-            // Hide logo on error
             document.getElementById('companyLogo').style.display = 'none';
         }
 
-        // Fetch and display peer companies
         const peersResponse = await fetch(`/api/stock/${ticker}/peers`, {
             method: 'POST',
             headers: {
@@ -161,7 +145,6 @@ async function search() {
 
         const peersData = await peersResponse.json();
 
-        // Display peer companies
         if (!peersData || !peersData.peers) {
             document.getElementById('peersData').innerHTML = '<p>Unable to fetch peer companies</p>';
         } else {
@@ -191,10 +174,8 @@ async function search() {
         console.error('Error fetching data:', err);
         showError(`Error fetching data: ${err.message}`);
         document.getElementById('newsData').innerHTML = '<p>Error analyzing market sentiment</p>';
-        // Hide logo on error
         document.getElementById('companyLogo').style.display = 'none';
     } finally {
-        // Hide loading overlay
         document.querySelector('.loading-overlay').classList.remove('active');
     }
 }
@@ -234,10 +215,8 @@ async function fetchInitialPrices() {
     }
 }
 
-// Initialize when the page loads
 document.addEventListener('DOMContentLoaded', async function () {
     await fetchInitialPrices();
-    // Refresh prices every 10 minutes
     setInterval(fetchInitialPrices, 10 * 60 * 1000);
 
     const showPromptBtn = document.getElementById('showPromptBtn');
